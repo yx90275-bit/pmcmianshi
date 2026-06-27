@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>PMC面试题 - 75道精选</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#5843ce">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="刷题宝典">
+<link rel="apple-touch-icon" href="icon-192.png">
+<script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB',sans-serif;background:#f5f6fa;color:#333;max-width:500px;margin:0 auto;min-height:100vh;padding-bottom:20px}
+[v-cloak]{display:none}
+
+/* ===== 首页 ===== */
+.home-wrap{padding:20px 16px}
+.home-title{display:flex;align-items:center;justify-content:center;gap:8px;font-size:20px;font-weight:700;color:#5843ce;padding:28px 0 16px;letter-spacing:2px}
+.home-title::before{content:'';width:4px;height:20px;background:linear-gradient(180deg,#5843ce,#7c6cf0);border-radius:2px}
+.home-title::after{content:'';width:4px;height:20px;background:linear-gradient(180deg,#7c6cf0,#5843ce);border-radius:2px}
+
+.stat-row{display:flex;gap:10px;margin-bottom:20px}
+.stat-card{flex:1;background:#fff;border-radius:12px;padding:18px 8px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.04)}
+.stat-num{font-size:26px;font-weight:800;color:#5843ce;line-height:1.2}
+.stat-lbl{font-size:11px;color:#999;margin-top:6px}
+
+.section{margin-bottom:20px}
+.section-title{font-size:13px;font-weight:700;color:#333;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.section-title::before{content:'';width:3px;height:14px;background:#5843ce;border-radius:2px}
+
+.filter-row{display:flex;flex-wrap:wrap;border:2px solid #e8e8e8;border-radius:12px;overflow:hidden}
+.filt-pill{flex:1;min-width:0;padding:10px 4px;font-size:13px;text-align:center;cursor:pointer;transition:all 0.15s;border:none;border-right:1px solid #e8e8e8;background:#fff;color:#666;user-select:none}
+.filt-pill:last-child{border-right:none}
+.filt-pill.on{background:#f0eeff;color:#5843ce;font-weight:600;border-color:#d0cce8}
+.filt-pill.off{background:#fff;color:#666}
+
+.type-bar{display:flex;border:2px solid #e8e8e8;border-radius:12px;overflow:hidden}
+.type-btn{flex:1;text-align:center;padding:14px 0;font-size:13px;cursor:pointer;transition:all 0.15s;border:none;background:#fff;color:#666;border-right:1px solid #e8e8e8;user-select:none}
+.type-btn:last-child{border-right:none}
+.type-btn.on{background:#f0eeff;color:#5843ce;font-weight:700}
+.type-btn.off{background:#fff;color:#666}
+
+.mode-row{display:flex;border:2px solid #e8e8e8;border-radius:12px;overflow:hidden;margin-bottom:0}
+.mode-card{flex:1;background:#fff;padding:14px 6px;text-align:center;cursor:pointer;transition:all 0.15s;border:none;border-right:1px solid #e8e8e8}
+.mode-card:last-child{border-right:none}
+.mode-card.sel{background:#f0eeff;color:#5843ce}
+.mode-card.sel .mode-name{color:#5843ce}
+.mode-icon{font-size:18px;margin-bottom:2px}
+.mode-name{font-size:12px;font-weight:600;color:#333;margin-bottom:2px}
+.mode-desc{font-size:9px;color:#aaa;line-height:1.2}
+
+.btn-start{width:100%;padding:14px;background:#fff;color:#666;text-align:center;border-radius:12px;font-size:15px;font-weight:600;cursor:pointer;border:2px solid #e8e8e8;letter-spacing:2px;transition:all 0.15s}
+.btn-start:active{background:#f0eeff;color:#5843ce;border-color:#d0cce8}
+.btn-reset{width:100%;padding:13px;background:#fff;color:#888;text-align:center;border-radius:10px;font-size:14px;cursor:pointer;border:1px solid #e0e0e0;margin-top:10px;transition:all 0.2s}
+.btn-reset:active{background:#fafafa}
+
+/* ===== 答题页 ===== */
+.prac-top{display:flex;align-items:center;justify-content:space-between;padding:14px 20px 0}
+.back-link{font-size:14px;color:#5843ce;cursor:pointer;display:flex;align-items:center;gap:2px}
+.pg-info{font-size:13px;color:#999;font-weight:500}
+.pg-line{height:3px;background:#e8e8ec;margin:10px 20px 0;border-radius:2px;overflow:hidden}
+.pg-line-fill{height:100%;background:#5843ce;border-radius:2px;transition:width 0.35s}
+
+.q-card{margin:16px 20px;background:#fff;border-radius:10px;border:1px solid #eee;padding:24px 22px;box-shadow:0 1px 3px rgba(0,0,0,0.03)}
+.q-tag{display:inline-block;background:#eff2ff;color:#5843ce;font-size:11px;padding:3px 10px;border-radius:10px;margin-bottom:12px;font-weight:500}
+.q-title{font-size:17px;font-weight:600;color:#222;line-height:1.65;margin-bottom:20px}
+
+.opt-item{display:flex;align-items:center;padding:14px 18px;border:1.5px solid #e0e0e0;border-radius:10px;margin-bottom:10px;cursor:pointer;transition:all 0.2s;background:#fff}
+.opt-item:active{transform:scale(0.98)}
+.opt-item .oc{width:28px;height:28px;border-radius:50%;border:1.5px solid #ccc;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#999;flex-shrink:0;margin-right:14px;transition:all 0.2s}
+.ot{flex:1;font-size:14px;color:#333;line-height:1.5}
+.opt-item.sel{border-color:#5843ce;background:#f8f7ff}
+.opt-item.sel .oc{border-color:#5843ce;background:#5843ce;color:#fff}
+.opt-item.ok{border-color:#52c41a;background:#f6ffed}
+.ok .oc{border-color:#52c41a;background:#52c41a;color:#fff}
+.opt-item.bad{border-color:#ff4d4f;background:#fff2f0}
+.bad .oc{border-color:#ff4d4f;background:#ff4d4f;color:#fff}
+.dim{opacity:0.4;pointer-events:none}
+
+.fb-box{padding:12px 14px;border-radius:10px;font-size:13px;margin-top:8px;font-weight:500}
+.fb-box.ok{background:#f6ffed;color:#389e0d}
+.fb-box.bad{background:#fff2f0;color:#cf1322}
+
+.fill-txt{font-size:14px;color:#444;line-height:2.2;margin-bottom:18px}
+.blk{color:#5843ce;font-weight:600;border-bottom:2px solid #5843ce;padding:0 2px;display:inline-block;min-width:40px}
+.fg{display:flex;align-items:center;margin-bottom:14px;flex-wrap:wrap}
+fg label{font-size:12px;color:#888;margin-right:8px;white-space:nowrap}
+.fg input{flex:1;min-width:100px;border:1.5px solid #e8e8e8;border-radius:8px;padding:10px 12px;font-size:14px;outline:none;transition:border-color 0.2s}
+.fg input:focus{border-color:#5843ce}
+.fg .ok{color:#52c41a;font-size:12px;margin-left:8px;font-weight:600}
+.fg .nok{color:#ff4d4f;font-size:12px;margin-left:8px;font-weight:600}
+.btn-sub{background:#5843ce;color:#fff;text-align:center;padding:13px;border-radius:10px;font-size:14px;cursor:pointer;margin-top:10px;font-weight:500;transition:background 0.2s}
+.btn-sub:active{background:#4837b0}
+.btn-re{background:#fff;color:#888;text-align:center;padding:13px;border-radius:10px;font-size:14px;cursor:pointer;margin-top:10px;font-weight:500;border:1px solid #e0e0e0}
+.btn-re:active{background:#fafafa}
+
+.ans-hint{font-size:13px;color:#bbb;margin-bottom:18px}
+.ans-btn{background:#5843ce;color:#fff;text-align:center;padding:16px;border-radius:10px;font-size:15px;cursor:pointer;font-weight:500;transition:background 0.2s}
+.ans-btn:active{background:#4837b0}
+.ans-content{background:#fafbff;border:1px solid #ede8fc;border-radius:10px;padding:18px;margin-top:14px}
+.ans-label{font-size:13px;font-weight:600;color:#5843ce;margin-bottom:10px}
+.ans-text{font-size:14px;color:#444;line-height:1.8}
+.ans-hide{text-align:center;color:#5843ce;font-size:13px;margin-top:14px;cursor:pointer;font-weight:500}
+
+/* 简答题 - 卡片式 */
+.flip-card{background:linear-gradient(135deg,#5843ce,#7c6cf0);border-radius:10px;padding:28px 20px;text-align:center;margin-bottom:16px;cursor:pointer}
+.flip-icon{font-size:36px;color:#fff;margin-bottom:10px}
+.flip-hint{font-size:13px;color:rgba(255,255,255,0.8)}
+.kw-box{background:#fff;border:2px solid #5843ce;border-radius:10px;padding:18px 16px;margin-bottom:16px}
+.kw-label{font-size:13px;font-weight:600;color:#5843ce;margin-bottom:12px;text-align:center}
+.kw-list{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.kw-tag{background:#f0eeff;color:#5843ce;padding:6px 14px;border-radius:8px;font-size:13px;font-weight:500}
+.kw-next{text-align:center;color:#5843ce;font-size:13px;margin-top:12px;cursor:pointer;font-weight:500}
+.ans-summary{margin-top:14px;padding:12px;background:#f8f7ff;border-radius:8px}
+.summary-label{font-size:11px;font-weight:600;color:#888;margin-bottom:6px}
+
+.analysis-box{background:#f8f8fc;border-left:3px solid #5843ce;border-radius:10px;padding:14px 16px;margin-top:18px}
+.al{font-size:12px;font-weight:700;color:#5843ce;margin-bottom:6px}
+.at{font-size:13px;color:#666;line-height:1.7}
+
+.action-bar{display:flex;gap:10px;padding:16px 20px 0}
+.abtn{flex:1;padding:13px 0;text-align:center;border-radius:10px;font-size:14px;cursor:pointer;border:none;transition:all 0.2s;font-weight:500}
+.abtn-prev{background:#fff;color:#666;border:1.5px solid #e0e0e0}
+.abtn-prev:active{background:#f5f5f5}
+.abtn-submit{background:#5843ce;color:#fff}
+.abtn-submit:active{background:#4837b0}
+.abtn-next{background:#5843ce;color:#fff}
+.abtn-next:active{background:#4837b0}
+
+/* ===== 结果页 ===== */
+.res-head{text-align:center;padding:36px 0 24px}
+.res-head .ri{font-size:50px}
+.rt{font-size:22px;font-weight:700;color:#333;margin-top:8px}
+.rs{font-size:13px;color:#999;margin-top:4px}
+.res-cards{display:flex;gap:10px;margin:0 16px 18px}
+.rcard{flex:1;background:#fff;border-radius:10px;padding:18px 8px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+.rcv{font-size:26px;font-weight:700;color:#5843ce;margin-bottom:4px}
+.rcl{font-size:11px;color:#999}
+.advice-area{background:#fff;border-radius:10px;padding:18px 20px;margin:0 16px 22px;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+.atitle{font-size:15px;font-weight:600;color:#333;margin-bottom:14px}
+.aitem{display:flex;align-items:flex-start;margin-bottom:12px}
+.adot{width:22px;height:22px;background:#f0eeff;color:#5843ce;text-align:center;line-height:22px;border-radius:50%;font-size:11px;font-weight:700;flex-shrink:0;margin-right:10px}
+.atxt{font-size:13px;color:#666;line-height:1.6}
+.res-btns{display:flex;gap:10px;padding:0 16px 30px}
+.rbtn{flex:1;text-align:center;padding:14px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;border:none;transition:all 0.2s}
+.rbtn:active{transform:scale(0.98)}
+.rbk{background:#f5f5f5;color:#777}
+.rrt{background:#5843ce;color:#fff}
+.q-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.fav-btn{font-size:22px;color:#ccc;cursor:pointer;background:none;border:none;padding:4px 8px;transition:all 0.2s}
+.fav-btn.on{color:#f5a623}
+.fav-pill.on{background:#fff;color:#f5a623;border:2px solid #f5a623;font-weight:600}
+.rev-pill.on{background:#fff;color:#e74c3c;border:2px solid #e74c3c;font-weight:600}
+</style>
+</head>
+<body>
+
+<div id="app" v-cloak>
+
+<!-- ========== 首页 ========== -->
+<template v-if="page==='home'">
+<div class="home-wrap">
+<div class="home-title">PMC面试题</div>
+
+<div class="stat-row">
+<div class="stat-card"><div class="stat-num">{{filteredCount}}</div><div class="stat-lbl">总题数</div></div>
+<div class="stat-card"><div class="stat-num">{{wrongCount}}</div><div class="stat-lbl">错题数</div></div>
+<div class="stat-card"><div class="stat-num">{{favCount}}</div><div class="stat-lbl">收藏</div></div>
+<div class="stat-card"><div class="stat-num">{{reviewCount}}</div><div class="stat-lbl">待复习</div></div>
+</div>
+
+<div class="section">
+<div class="section-title">分类筛选</div>
+<div class="filter-row">
+<button class="filt-pill" :class="selCat==='全部'?'on':'off'" @click="selCat='全部'">全部</button>
+<button v-for="c in catList" :key="c.key" class="filt-pill" :class="selCat===c.key?'on':'off'" @click="selCat=c.key">{{c.name}}</button>
+<button class="filt-pill fav-pill" :class="selCat==='收藏'?'on':'off'" @click="selCat='收藏'">收藏 ({{favCount}})</button>
+<button class="filt-pill rev-pill" :class="selCat==='待复习'?'on':'off'" @click="selCat='待复习'">待复习 ({{reviewCount}})</button>
+</div>
+</div>
+
+<div class="section">
+<div class="section-title">题型选择</div>
+<div class="type-bar">
+<button class="type-btn" :class="selType===0?'on':'off'" @click="selType=0">选择题</button>
+<button class="type-btn" :class="selType===2?'on':'off'" @click="selType=2">简答题</button>
+</div>
+</div>
+
+<div class="section">
+<div class="section-title">练习模式</div>
+<div class="mode-row">
+<div class="mode-card" :class="{sel:practiceMode==='order'}" @click="practiceMode='order'">
+<div class="mode-icon">&#128214;</div>
+<div class="mode-name">顺序练习</div>
+<div class="mode-desc">按分类顺序逐题练习</div>
+</div>
+<div class="mode-card" :class="{sel:practiceMode==='random'}" @click="practiceMode='random'">
+<div class="mode-icon">&#127922;</div>
+<div class="mode-name">随机练习</div>
+<div class="mode-desc">随机打乱题目顺序</div>
+</div>
+</div>
+</div>
+
+<button class="btn-start" @click="startPractice">开始练习</button>
+<button class="btn-reset" v-if="wrongCount>0" @click="resetWrong">重置错题 ({{wrongCount}})</button>
+</div>
+</template>
+
+<!-- ========== 答题页 ========== -->
+<template v-if="page==='practice'">
+<div class="prac-top">
+<div class="back-link" @click="goHome">&#8592; 返回</div>
+<div class="pg-info">{{curIdx+1}} / {{questions.length}}</div>
+</div>
+<div class="pg-line"><div class="pg-line-fill" :style="{width:(curIdx/questions.length*100)+'%'}"></div></div>
+
+<div class="q-card">
+<div class="q-head">
+<div class="q-tag" v-text="questions[curIdx].category"></div>
+<div class="fav-btn" :class="{on:isFav}" @click="toggleFav">{{isFav?'&#9733;':'&#9734;'}}</div>
+</div>
+<div class="q-title">{{curIdx+1}}. {{questions[curIdx].title}}</div>
+
+<!-- 选择题 -->
+<template v-if="curType===0">
+<div class="opt-item" v-for="(opt,oi) in questions[curIdx].choice_options" :key="oi"
+:class="getOptClass(oi)" @click="doSelect(oi)">
+<div class="oc">{{['A','B','C','D'][oi]}}</div>
+<div class="ot">{{opt}}</div>
+</div>
+<div class="fb-box" :class="choiceDone && choiceSel===questions[curIdx].choice_answer?'ok':'bad'"
+v-if="choiceDone">
+{{choiceSel===questions[curIdx].choice_answer?'回答正确！':'回答错误，正确答案是 '+['A','B','C','D'][questions[curIdx].choice_answer]}}
+</div>
+</template>
+
+<!-- 填空题 -->
+<template v-if="curType===1">
+<div class="fill-txt" v-html="renderFill()"></div>
+<div class="ans-hint">请先回忆答案，再点击查看</div>
+<div class="ans-btn" v-if="!ansShow" @click="showAnsFill">查看答案</div>
+<div class="ans-content" v-else>
+<div class="ans-label">参考答案</div>
+<div class="ans-text">{{questions[curIdx].answer}}</div>
+<div class="ans-hide" @click="ansShow=false;showAnalysis=false">隐藏答案，再回忆一次</div>
+</div>
+</template>
+
+<!-- 简答题 - 卡片式 -->
+<template v-if="curType===2">
+<!-- 状态0：点击查看关键词 -->
+<div class="flip-card" v-if="flipState===0" @click="flipCard">
+<div class="flip-icon">&#128214;</div>
+<div class="flip-hint">点击查看核心关键词</div>
+</div>
+<!-- 状态1：关键词 -->
+<div class="kw-box" v-else-if="flipState===1">
+<div class="kw-label">核心关键词</div>
+<div class="kw-list">
+<span class="kw-tag" v-for="(kw,ki) in questions[curIdx].keywords" :key="ki">{{kw}}</span>
+</div>
+<div class="kw-next" @click="flipCard">查看完整答案</div>
+</div>
+<!-- 状态2：完整答案 -->
+<div v-else>
+<div class="ans-label">参考答案</div>
+<div class="ans-text">{{questions[curIdx].answer}}</div>
+<div class="ans-summary" v-if="questions[curIdx].summary"><div class="summary-label">一句话总结</div>{{questions[curIdx].summary}}</div>
+<div class="ans-hide" @click="flipCard">返回题目重练</div>
+</div>
+</template>
+
+</div>
+
+<div class="action-bar">
+<button class="abtn abtn-prev" @click="prevQ">上一题</button>
+<button v-if="(curType===0&&!choiceDone) || (curType===1&&!ansShow) || (curType===2&&flipState===0)" class="abtn abtn-submit" @click="submitAction">提交</button>
+<button v-else class="abtn abtn-next" @click="nextQ">下一题</button>
+</div>
+
+<div class="analysis-box" v-if="showAnalysis">
+<div class="al">解析</div>
+<div class="at">{{questions[curIdx].analysis}}</div>
+</div>
+</template>
+
+<!-- ========== 结果页 ========== -->
+<template v-if="page==='result'">
+<div class="res-head">
+<div class="ri">&#128202;</div>
+<div class="rt">练习结果</div>
+<div class="rs">三种模式练习情况汇总</div>
+</div>
+<div class="res-cards">
+<div class="rcard"><div class="rcv">{{rChoice}}/{{rTotal}}</div><div class="rcl">选择题正确</div></div>
+<div class="rcard"><div class="rcv">{{rFillDone?rFillOk+'/'+rFillTotal:'-'}}</div><div class="rcl">填空题正确</div></div>
+<div class="rcard"><div class="rcv">{{rAnsView}}/{{rTotal}}</div><div class="rcl">简答题查看</div></div>
+</div>
+<div class="advice-area">
+<div class="atitle">练习建议</div>
+<div class="aitem"><div class="adot">1</div><div class="atxt">选择题是基础，先通过选择题记住每个问题的正确答案</div></div>
+<div class="aitem"><div class="adot">2</div><div class="atxt">填空题加深记忆，需要准确记住关键词和关键数据</div></div>
+<div class="aitem"><div class="adot">3</div><div class="atxt">简答题是终极目标，不看答案能完整回答才算真正掌握</div></div>
+</div>
+<div class="res-btns">
+<button class="rbtn rbk" @click="goHome">返回首页</button>
+<button class="rbtn rrt" @click="restart">再来一次</button>
+</div>
+</template>
+
+</div>
+
+<script src="question_data.js"></script>
+<script>
+new Vue({
+el:'#app',
+data:{
+page:'home',
+selCat:'全部',
+selType:0,
+practiceMode:'order',
+wrongSet:{},
+markedSet:{},
+favSet:{},
+reviewLog:{},
+questions:[],
+allQuestions:[],
+curIdx:0,
+curType:0,
+choiceSel:undefined,
+choiceDone:false,
+fillVals:[],
+fillDone:false,
+fillResults:[],
+ansShow:false,
+showAnalysis:false,
+flipState:0,
+rTotal:0,
+rChoice:0,
+rFillOk:0,
+rFillTotal:0,
+rFillDone:false,
+rAnsView:0
+},
+created:function(){
+this.allQuestions=questionData||[];
+this.questions=this.allQuestions.slice();
+this._loadFav();
+},
+computed:{
+catList:function(){
+var map={};
+(this.allQuestions||[]).forEach(function(q){
+if(!map[q.category])map[q.category]={key:q.category,name:q.category};
+});
+return Object.values(map);
+},
+wrongCount:function(){
+return Object.keys(this.wrongSet).length;
+},
+filteredCount:function(){
+var self=this;
+return (this.allQuestions||[]).filter(function(q){
+if(self.selCat!=='全部'&&q.category!==self.selCat)return false;
+return true;
+}).length;
+},
+favCount:function(){
+var list=JSON.parse(localStorage.getItem('msbd_fav')||'[]');
+return list.length;
+},
+reviewCount:function(){
+var log=JSON.parse(localStorage.getItem('msbd_review')||'{}');
+var now=Date.now(),count=0;
+var self=this;
+Object.keys(log).forEach(function(id){
+if(!self.favSet&&self.allQuestions){self._loadFav()}
+var days=Math.floor((now-log[id])/(86400000));
+if(days>=1)count++;
+});
+return count;
+},
+isFav:function(){
+var id=this.questions[this.curIdx]?this.questions[this.curIdx].id:null;
+if(!id)return false;
+this._loadFav();
+return this.favSet[id]===true;
+}
+},
+methods:{
+startPractice:function(){
+var self=this;
+var list=(this.allQuestions||[]).filter(function(q){
+if(self.selCat!=='全部'&&self.selCat!=='收藏'&&self.selCat!=='待复习'&&q.category!==self.selCat)return false;
+if(self.selCat==='收藏'){self._loadFav();if(!self.favSet[q.id])return false}
+if(self.selCat==='待复习'){var log=JSON.parse(localStorage.getItem('msbd_review')||'{}');if(!log[q.id])return false;var days=Math.floor((Date.now()-log[q.id])/86400000);if(days<1)return false}
+return true;
+});
+if(list.length===0){alert('该分类暂无题目');return}
+if(this.practiceMode==='random'){
+list=list.slice().sort(function(){return Math.random()-0.5});
+}
+this.questions=list;
+this.curIdx=0;
+this.page='practice';
+this.loadQ();
+},
+loadQ:function(){
+var q=this.questions[this.curIdx];
+this.curType=this.selType;
+this.choiceSel=undefined;
+this.choiceDone=false;
+this.fillVals=new Array(q.fill_answer?q.fill_answer.length:0).fill('');
+this.fillDone=false;
+this.fillResults=[];
+this.ansShow=false;
+this.showAnalysis=false;
+this.flipState=0;
+},
+goHome:function(){
+this.page='home';
+},
+getOptClass:function(oi){
+if(!this.choiceDone){
+if(oi===this.choiceSel)return 'sel';
+return '';
+}
+if(oi===this.questions[this.curIdx].choice_answer)return 'ok';
+if(oi===this.choiceSel)return 'bad';
+return 'dim';
+},
+doSelect:function(oi){
+if(this.choiceDone)return;
+this.choiceSel=oi;
+},
+prevQ:function(){
+if(this.curIdx>0){this.curIdx--;this.loadQ()}
+},
+checkFill:function(){
+var q=this.questions[this.curIdx];
+this.fillResults=q.fill_answer.map(function(a,i){
+return self.fillVals[i]&&self.fillVals[i].trim()===a;
+});
+this.fillDone=true;
+this.showAnalysis=true;
+},
+retryFill:function(){
+this.fillDone=false;
+this.fillResults=[];
+this.showAnalysis=false;
+},
+showAnsFill:function(){
+this.ansShow=true;
+this.showAnalysis=true;
+this._recordReview();
+},
+submitAction:function(){
+if(this.curType===0&&!this.choiceDone){
+if(this.choiceSel===undefined){alert('请先选择一个选项');return}
+this.choiceDone=true;
+if(this.choiceSel!==this.questions[this.curIdx].choice_answer)this.wrongSet[this.questions[this.curIdx].id]=true;
+this.showAnalysis=true;
+this._recordReview();
+}
+else if(this.curType===1&&!this.ansShow){this.ansShow=true;this.showAnalysis=true;this._recordReview()}
+else if(this.curType===2&&this.flipState===0){this.flipState=2;this.showAnalysis=true;this._recordReview()}
+},
+nextQ:function(){
+if(this.curIdx<this.questions.length-1){this.curIdx++;this.loadQ()}
+else{this.finishPractice()}
+},
+finishPractice:function(){
+var self=this,total=this.questions.length,cOk=0,fOk=0,fT=0,aV=0,fD=0;
+this.questions.forEach(function(q,i){
+var r=self.getRecord(i);
+if(r.cDone&&r.cSel===q.choice_answer)cOk++;
+if(r.fDone){fD++;fT+=r.fR.length;fOk+=r.fR.filter(function(x){return x}).length}
+if(r.aShown)aV++;
+});
+this.rTotal=total;this.rChoice=cOk;this.rFillOk=fOk;this.rFillTotal=fT;this.rAnsView=aV;this.rFillDone=fD>0;
+this.page='result';
+},
+getRecord:function(i){
+var key=i+'_'+this.questions[i].id;
+return JSON.parse(localStorage.getItem(key)||'{"cDone":false,"cSel":-1,"fDone":false,"fR":[],"aShown":false}');
+},
+toggleMark:function(idx){
+var id=this.questions[idx].id;
+if(this.markedSet[id]){delete this.markedSet[id]}
+else{this.markedSet[id]=true}
+},
+flipCard:function(){
+this.flipState=(this.flipState+1)%3;
+if(this.flipState===2){this.showAnalysis=true;this._recordReview()}
+},
+_loadFav:function(){
+var list=JSON.parse(localStorage.getItem('msbd_fav')||'[]');
+this.favSet={};
+list.forEach(function(id){this.favSet[id]=true}.bind(this));
+},
+toggleFav:function(){
+var id=this.questions[this.curIdx].id;
+this._loadFav();
+if(this.favSet[id]){
+delete this.favSet[id];
+var list=JSON.parse(localStorage.getItem('msbd_fav')||'[]').filter(function(x){return x!==id});
+localStorage.setItem('msbd_fav',JSON.stringify(list));
+}else{
+this.favSet[id]=true;
+var list=JSON.parse(localStorage.getItem('msbd_fav')||'[]');
+if(list.indexOf(id)===-1){list.push(id)}
+localStorage.setItem('msbd_fav',JSON.stringify(list));
+}
+this.$forceUpdate();
+},
+_recordReview:function(){
+var id=this.questions[this.curIdx].id;
+var log=JSON.parse(localStorage.getItem('msbd_review')||'{}');
+log[id]=Date.now();
+localStorage.setItem('msbd_review',JSON.stringify(log));
+},
+resetWrong:function(){
+this.wrongSet={};this.wrongCount=0;
+},
+restart:function(){
+this.startPractice()
+},
+renderFill:function(){
+var txt=this.questions[this.curIdx].fill_blank||'';
+return txt.replace(/____/g,'<span class="blk">____</span>');
+}
+}
+});
+
+if('serviceWorker' in navigator){
+window.addEventListener('load',function(){
+navigator.serviceWorker.register('sw.js').then(function(reg){
+console.log('SW registered:',reg.scope);
+}).catch(function(err){
+console.log('SW failed:',err);
+});
+});
+}
+</script>
+</body>
+</html>
